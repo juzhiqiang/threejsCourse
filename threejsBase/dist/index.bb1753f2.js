@@ -560,7 +560,7 @@ function hmrAccept(bundle, id) {
 var _three = require("three");
 // 导入轨道控制器
 var _orbitControls = require("three/examples/jsm/controls/OrbitControls");
-// 目标：了解threejs最基本得内容
+var _3Dmove = require("./3dMove");
 // 1. 创建场景
 const scene = new _three.Scene();
 // 创建相机--透视相机
@@ -579,6 +579,8 @@ const cubeMaterial = new _three.MeshBasicMaterial({
 const cube = new _three.Mesh(cubeGeomentry, cubeMaterial);
 // 将几何体放入场景
 scene.add(cube);
+// 修改位置
+// editPosition(cube);
 // 初始化渲染器
 const renderer = new _three.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -588,15 +590,19 @@ document.body.appendChild(renderer.domElement);
 renderer.render(scene, camera);
 // 创建轨道控制器
 const controls = new (0, _orbitControls.OrbitControls)(camera, renderer.domElement);
+// 添加坐标轴辅助器
+const axesHelper = new _three.AxesHelper(5);
+scene.add(axesHelper);
 // 不断更新渲染
 function render() {
+    (0, _3Dmove.editPosition)(cube);
     renderer.render(scene, camera);
     requestAnimationFrame(render);
 }
 render();
 console.log(_three);
 
-},{"three":"3wuKv","three/examples/jsm/controls/OrbitControls":"gvuOu"}],"3wuKv":[function(require,module,exports) {
+},{"three":"3wuKv","three/examples/jsm/controls/OrbitControls":"gvuOu","./3dMove":"2T0eg"}],"3wuKv":[function(require,module,exports) {
 /**
  * @license
  * Copyright 2010-2023 Three.js Authors
@@ -30724,6 +30730,18 @@ class MapControls extends OrbitControls {
     }
 }
 
-},{"three":"3wuKv","@parcel/transformer-js/src/esmodule-helpers.js":"bwDvH"}]},["ar6zV","3Bb0l"], "3Bb0l", "parcelRequire239d")
+},{"three":"3wuKv","@parcel/transformer-js/src/esmodule-helpers.js":"bwDvH"}],"2T0eg":[function(require,module,exports) {
+// 控制3d物体移动
+// 修改物体位置
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "editPosition", ()=>editPosition);
+function editPosition(mesh) {
+    // mesh.position.set(5, 0, 0);
+    if (mesh.position.x < 5) mesh.position.x += 0.01;
+    else mesh.position.x = 0;
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"bwDvH"}]},["ar6zV","3Bb0l"], "3Bb0l", "parcelRequire239d")
 
 //# sourceMappingURL=index.bb1753f2.js.map

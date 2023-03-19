@@ -1,8 +1,8 @@
 import * as THREE from "three";
 // 导入轨道控制器
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { editPosition } from "./3dMove";
 
-// 目标：了解threejs最基本得内容
 // 1. 创建场景
 const scene = new THREE.Scene();
 // 创建相机--透视相机
@@ -26,6 +26,8 @@ const cubeMaterial = new THREE.MeshBasicMaterial({
 const cube = new THREE.Mesh(cubeGeomentry, cubeMaterial);
 // 将几何体放入场景
 scene.add(cube);
+// 修改位置
+// editPosition(cube);
 
 // 初始化渲染器
 const renderer = new THREE.WebGLRenderer();
@@ -39,8 +41,13 @@ renderer.render(scene, camera);
 // 创建轨道控制器
 const controls = new OrbitControls(camera, renderer.domElement);
 
+// 添加坐标轴辅助器
+const axesHelper = new THREE.AxesHelper(5);
+scene.add(axesHelper);
+
 // 不断更新渲染
 function render() {
+  editPosition(cube);
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }
