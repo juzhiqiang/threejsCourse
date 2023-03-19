@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@parcel/transformer-less': ^2.8.3
+  '@types/three': ^0.149.0
   parcel: ^2.8.3
   three: ^0.150.1
   typescript: ^5.0.2
@@ -12,6 +13,7 @@ dependencies:
   typescript: registry.npmmirror.com/typescript/5.0.2
 
 devDependencies:
+  '@types/three': registry.npmmirror.com/@types/three/0.149.0
   parcel: registry.npmmirror.com/parcel/2.8.3
 
 packages:
@@ -1128,6 +1130,20 @@ packages:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/parse-json/-/parse-json-4.0.0.tgz}
     name: '@types/parse-json'
     version: 4.0.0
+    dev: true
+
+  registry.npmmirror.com/@types/three/0.149.0:
+    resolution: {integrity: sha512-fgNBm9LWc65ER/W0cvoXdC0iMy7Ke9e2CONmEr6Jt8sDSY3sw4DgOubZfmdZ747dkPhbQrgRQAWwDEr2S/7IEg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/three/-/three-0.149.0.tgz}
+    name: '@types/three'
+    version: 0.149.0
+    dependencies:
+      '@types/webxr': registry.npmmirror.com/@types/webxr/0.5.1
+    dev: true
+
+  registry.npmmirror.com/@types/webxr/0.5.1:
+    resolution: {integrity: sha512-xlFXPfgJR5vIuDefhaHuUM9uUgvPaXB6GKdXy2gdEh8gBWQZ2ul24AJz3foUd8NNKlSTQuWYJpCb1/pL81m1KQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@types/webxr/-/webxr-0.5.1.tgz}
+    name: '@types/webxr'
+    version: 0.5.1
     dev: true
 
   registry.npmmirror.com/abortcontroller-polyfill/1.7.5:
