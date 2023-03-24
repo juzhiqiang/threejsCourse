@@ -39,6 +39,8 @@ renderer.render(scene, camera);
 
 // 创建轨道控制器
 const controls = new OrbitControls(camera, renderer.domElement);
+// 设置控制器的阻尼，模仿惯性想过
+controls.enableDamping = true;
 
 // 添加坐标轴辅助器
 const axesHelper = new THREE.AxesHelper(5);
@@ -51,8 +53,22 @@ gsapAnimatas(cube);
 function render() {
   //08-修改位置
   // editPosition(cube);
+
+  controls.update();
   renderer.render(scene, camera);
   requestAnimationFrame(render);
+
+  // 10-监听画面变化，更新渲染画面
+  window.addEventListener("resize", () => {
+    // 更新摄像头
+    camera.aspect = window.innerWidth / window.innerHeight;
+    // 更新摄像机投影矩阵
+    camera.updateProjectionMatrix();
+    // 更新渲染器
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    // 设置渲染器像素比
+    renderer.setPixelRatio(window.devicePixelRatio);
+  });
 }
 
 render();
