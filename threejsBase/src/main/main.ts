@@ -2,6 +2,7 @@ import * as THREE from "three";
 // 导入轨道控制器
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { editPosition } from "./3dMove";
+import { gsapAnimatas } from "./gsap";
 
 // 1. 创建场景
 const scene = new THREE.Scene();
@@ -26,8 +27,6 @@ const cubeMaterial = new THREE.MeshBasicMaterial({
 const cube = new THREE.Mesh(cubeGeomentry, cubeMaterial);
 // 将几何体放入场景
 scene.add(cube);
-// 修改位置
-// editPosition(cube);
 
 // 初始化渲染器
 const renderer = new THREE.WebGLRenderer();
@@ -45,9 +44,13 @@ const controls = new OrbitControls(camera, renderer.domElement);
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
 
+// 09-直接使用动画库,使用09时候可以不使用08手动计算改为由动画库辅助计算变化值
+gsapAnimatas(cube);
+
 // 不断更新渲染
 function render() {
-  editPosition(cube);
+  //08-修改位置
+  // editPosition(cube);
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }

@@ -3,12 +3,14 @@ lockfileVersion: 5.4
 specifiers:
   '@parcel/transformer-less': ^2.8.3
   '@types/three': ^0.149.0
+  gsap: ^3.11.5
   parcel: ^2.8.3
   three: ^0.150.1
   typescript: ^5.0.2
 
 dependencies:
   '@parcel/transformer-less': registry.npmmirror.com/@parcel/transformer-less/2.8.3
+  gsap: registry.npmmirror.com/gsap/3.11.5
   three: registry.npmmirror.com/three/0.150.1
   typescript: registry.npmmirror.com/typescript/5.0.2
 
@@ -1515,6 +1517,12 @@ packages:
     requiresBuild: true
     dev: false
     optional: true
+
+  registry.npmmirror.com/gsap/3.11.5:
+    resolution: {integrity: sha512-Q89nKCLgoX5xUjznh9LcaIUkz54k1voNucT1Rpf9SJNFIQznBwFqt5qUUQbeVInFyN/n18OUJkpeI6CNEDt74w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/gsap/-/gsap-3.11.5.tgz}
+    name: gsap
+    version: 3.11.5
+    dev: false
 
   registry.npmmirror.com/has-flag/3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/has-flag/-/has-flag-3.0.0.tgz}
