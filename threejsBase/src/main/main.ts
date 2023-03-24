@@ -1,6 +1,7 @@
 import * as THREE from "three";
 // 导入轨道控制器
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { fullscreen } from "../until";
 import { editPosition } from "./3dMove";
 import { gsapAnimatas } from "./gsap";
 
@@ -48,6 +49,11 @@ scene.add(axesHelper);
 
 // 09-直接使用动画库,使用09时候可以不使用08手动计算改为由动画库辅助计算变化值
 gsapAnimatas(cube);
+
+// 11 全屏控制
+window.addEventListener("dblclick", () => {
+  fullscreen(renderer.domElement, !document.fullscreenElement);
+});
 
 // 不断更新渲染
 function render() {
