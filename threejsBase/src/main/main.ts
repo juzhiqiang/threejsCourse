@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { fullscreen } from "../until";
 import { editPosition } from "./3dMove";
+import { DEBUG } from "./datGui";
 import { gsapAnimatas } from "./gsap";
 
 // 1. 创建场景
@@ -78,5 +79,38 @@ function render() {
 }
 
 render();
+
+// 开启调试
+const debugParm = [
+  {
+    _type: "number",
+    type: cube.position,
+    name: "x",
+    min: 0,
+    max: 5,
+    step: 0.01,
+    change: (value) => {
+      console.log("被改变的值：", value);
+    },
+  },
+  {
+    _type: "color",
+    name: "color",
+    color: {
+      color: "#ff6060",
+    },
+    change: (value) => {
+      cube.material.color.set(value);
+    },
+  },
+  {
+    type: cube,
+    name: "visible",
+    change: (value) => {
+      cube.material.color.set(value);
+    },
+  },
+];
+DEBUG(debugParm);
 
 console.log(THREE);
