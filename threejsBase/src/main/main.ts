@@ -1,5 +1,6 @@
 import { grain } from "../grain";
 import { bzGrain } from "../grain/bz";
+import { galaxyGrain } from "../grain/galaxys";
 import { base } from "./base";
 
 const nav = (type: string) => {
@@ -8,9 +9,10 @@ const nav = (type: string) => {
     base();
   } else if (type === "grain") {
     grain();
-  } else {
-    // bsgrain
+  } else if (type === "bsgrain") {
     bzGrain();
+  } else if(type === "xxgrain"){
+    galaxyGrain();
   }
 };
 
