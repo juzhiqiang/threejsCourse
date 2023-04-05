@@ -10,18 +10,19 @@ export const galaxyGrain = () => {
     window.innerWidth / window.innerHeight,
     0.1,
     // 镜头设置近一点 不会看到上返雪花
-    10
+    20
   );
   // 设置相机位置
   camera.position.set(0, 0, 10);
   scene.add(camera);
 
   const parmars = {
-    count: 1000,
-    size: 0.1,
+    count: 10000,
+    size: 0.3,
     radius: 5,
-    branch: 3,
-    color: "#ffffff",
+    branch: 5,
+    color: "#ff6030",
+    endColor: "#1b3984",
   };
 
   const generateGalaxy = () => {
@@ -30,29 +31,48 @@ export const galaxyGrain = () => {
     // 随机生成位置
     const position = new Float32Array(parmars.count * 3);
     // 设置顶点颜色
-    const color = new Float32Array(parmars.count * 3);
+    const colors = new Float32Array(parmars.count * 3);
+    const centerColor = new THREE.Color(parmars.color);
+    const endColor = new THREE.Color(parmars.endColor);
     // 循环生成点
     for (let i = 0; i < parmars.count; i++) {
       // 当前点应该在那一条分支角度
       const branchAgel =
         (i % parmars.branch) * ((2 * Math.PI) / parmars.branch);
-      console.log(branchAgel);
       // 当前点距离圆心位置
-      const distance = Math.random() * parmars.radius;
+      const distance =
+        Math.random() * parmars.radius * Math.pow(Math.random(), 3);
+
+      // 设置空间立体感
+      const randomX =
+        (Math.pow(Math.random() * 2 - 1, 3) * (parmars.radius - distance)) / 5;
+      const randomY =
+        (Math.pow(Math.random() * 2 - 1, 3) * (parmars.radius - distance)) / 5;
+      const randomZ =
+        (Math.pow(Math.random() * 2 - 1, 3) * (parmars.radius - distance)) / 5;
 
       const current = i * 3;
-      position[current] = Math.cos(branchAgel) * distance;
-      position[current + 1] = 0;
-      position[current + 2] = Math.sin(branchAgel) * distance;
+      position[current] = Math.cos(branchAgel + distance) * distance + randomX;
+      position[current + 1] = randomY;
+      position[current + 2] =
+        Math.sin(branchAgel + distance) * distance + randomZ;
+
+      // 设置顶点颜色，混合颜色形成渐变
+      const minColor = centerColor.clone();
+      minColor.lerp(endColor, distance / parmars.radius);
+      colors[current] = minColor.r;
+      colors[current + 1] = minColor.g;
+      colors[current + 2] = minColor.b;
     }
     geometry.setAttribute("position", new THREE.BufferAttribute(position, 3));
+    geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
     //   加入纹理
     const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load("/particles/3.png");
+    const texture = textureLoader.load("/particles/4.png");
     // 设置材质
     const materail = new THREE.PointsMaterial({
-      color: new THREE.Color(parmars.color),
+      // color: new THREE.Color(parmars.color),
       size: parmars.size,
       sizeAttenuation: true,
       depthWrite: false,
@@ -60,7 +80,7 @@ export const galaxyGrain = () => {
       map: texture,
       alphaMap: texture,
       transparent: true,
-      // vertexColors: true,
+      vertexColors: true,
     });
 
     const points = new THREE.Points(geometry, materail);
