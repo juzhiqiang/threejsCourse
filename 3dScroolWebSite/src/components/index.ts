@@ -6,6 +6,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { meshSjxGroup } from "./sj";
 import { Ray } from "./ray";
 import { Points } from "./points";
+import { gsap } from "gsap";
 export const threeCanvas = () => {
   // 1. 创建场景
   const scene = new THREE.Scene();
@@ -44,19 +45,40 @@ export const threeCanvas = () => {
   renderer.render(scene, camera);
   let clock = new THREE.Clock();
 
+  gsap.to(cubeGroup.rotation, {
+    x: "+=" + Math.PI,
+    y: "+=" + Math.PI,
+    duration: 5,
+    repeat: -1,
+    ease: "none",
+  });
+
+  gsap.to(MeshSjxGroup.rotation, {
+    x: "+=" + Math.PI,
+    y: "+=" + Math.PI,
+    duration: 5,
+    repeat: -1,
+    ease: "none",
+  });
+
+  gsap.to(smallBall.position, {
+    x: -3,
+    duration: 6,
+    ease: "power2.inOut",
+    repeat: -1,
+    yoyo: true,
+  });
+  gsap.to(smallBall.position, {
+    y: 0,
+    duration: 0.5,
+    ease: "power2.inOut",
+    repeat: -1,
+    yoyo: true,
+  });
+
   const render = () => {
     const time = clock.getElapsedTime();
-    cubeGroup.rotation.x = time * 0.5;
-    cubeGroup.rotation.y = time * 0.5;
 
-    MeshSjxGroup.rotation.x = time * 0.3;
-    MeshSjxGroup.rotation.y = time * 0.3;
-
-    smallBall.position.x = Math.sin(time) * 3;
-    smallBall.position.z = Math.cos(time) * 3;
-    smallBall.position.y = 2 + Math.sin(time * 10) / 2;
-    pointGroup.rotation.z = Math.sin(time) * 0.05;
-    pointGroup.rotation.x = Math.sin(time) * 0.05;
     // 跟进当前滚动距离设置相机镜头
     camera.position.y = -(window.scrollY / window.innerHeight) * 30;
 
@@ -72,7 +94,21 @@ export const threeCanvas = () => {
     const newPage = Math.round(window.scrollY / window.innerHeight);
     if (newPage !== datas.current.curPage) {
       datas.current.curPage = newPage;
-      console.log("改变页面", newPage);
+      gsap.to(arrGroup[newPage].rotation, {
+        z: "+=" + Math.PI * 2,
+        x: "+=" + Math.PI * 2,
+        duration: 1,
+      });
+      //   文字动画
+      gsap.fromTo(
+        `.pages${newPage + 1} h1`,
+        {
+          rotate: 0,
+          x: -300,
+          direction: 0.5,
+        },
+        { rotate: "+=360", x: 0, direction: 0.5 }
+      );
     }
   });
 };

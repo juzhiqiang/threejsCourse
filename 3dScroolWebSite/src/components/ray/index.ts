@@ -21,12 +21,13 @@ export const Ray = (
     for (let j = 0; j < 5; j++) {
       for (let z = 0; z < 5; z++) {
         const cube = new THREE.Mesh(geometry, material);
-        cube.position.set(i * 2 - 5, j * 2 - 5, z * 2 - 5);
+        cube.position.set(i * 2 - 4, j * 2 - 4, z * 2 - 4);
         cubeGroup.add(cube);
         cubeArr.push(cube);
       }
     }
   }
+  cubeGroup.position.set(0, -1, 0);
   scene.add(cubeGroup);
   //   创建投射光线对象
   const raycaster = new THREE.Raycaster();
@@ -40,7 +41,6 @@ export const Ray = (
     const result = raycaster.intersectObjects(cubeArr);
     if (result.length > 0) {
       result[0].object.material = redMaterial;
-      console.log(result);
     }
   });
 
