@@ -5,6 +5,7 @@ export const Ray = (
   camera: THREE.Camera
 ): {
   cubeGroup: THREE.Group;
+  mouse: THREE.Vector2;
 } => {
   // 创建球几何体
   const geometry = new THREE.BoxGeometry(2, 2, 2);
@@ -44,7 +45,14 @@ export const Ray = (
     }
   });
 
+  //   监听鼠标悬浮
+  window.addEventListener("mousemove", (event) => {
+    mouse.x = event.screenX / window.innerWidth - 0.5;
+    mouse.y = event.screenY / window.innerHeight - 0.5;
+  });
+
   return {
     cubeGroup,
+    mouse,
   };
 };

@@ -25,7 +25,7 @@ export const threeCanvas = () => {
   });
 
   //   设置光线投射几何体
-  const { cubeGroup } = Ray(scene, camera);
+  const { cubeGroup, mouse } = Ray(scene, camera);
   // 三角形;
   const MeshSjxGroup = meshSjxGroup(scene);
   //   弹跳小球
@@ -77,10 +77,14 @@ export const threeCanvas = () => {
   });
 
   const render = () => {
-    const time = clock.getElapsedTime();
+    // const time = clock.getElapsedTime();
+    // 两者同时使用时有干扰
+    const deltaTime = clock.getDelta();
 
     // 跟进当前滚动距离设置相机镜头
     camera.position.y = -(window.scrollY / window.innerHeight) * 30;
+    // 鼠标晃动
+    camera.position.x += (mouse.x * 10 - camera.position.x) * deltaTime * 5;
 
     renderer.render(scene, camera);
     requestAnimationFrame(render);
