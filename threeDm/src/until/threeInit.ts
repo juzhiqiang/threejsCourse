@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 export const threeInit = (
-  dom: Document
+  dom: Document,
+  renderFn: Function
 ): {
   scene?: THREE.Scene;
   camera?: THREE.Camera;
@@ -12,11 +13,11 @@ export const threeInit = (
     75,
     window.innerWidth / window.innerHeight,
     0.1,
-    1000
+    300
   );
 
   // 设置相机位置
-  camera.position.set(0, 0, 15);
+  camera.position.set(0, 0, 18);
   scene.add(camera);
 
   // 渲染器
@@ -25,7 +26,7 @@ export const threeInit = (
   });
   // 设置渲染大小
   renderer.setSize(window.innerWidth, window.innerHeight);
-  //   设置渲染器透明
+  renderer.shadowMap.enabled = true;
   dom.appendChild(renderer.domElement);
 
   // 添加坐标轴辅助器
@@ -41,9 +42,7 @@ export const threeInit = (
   let clock = new THREE.Clock();
 
   const render = () => {
-    // const time = clock.getElapsedTime();
-    // 两者同时使用时有干扰
-    const deltaTime = clock.getDelta();
+    renderFn(clock);
 
     renderer.render(scene, camera);
     requestAnimationFrame(render);

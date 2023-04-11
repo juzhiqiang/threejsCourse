@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { meshSjxGroup } from "./sj";
 import { Ray } from "./ray";
-import { Points } from "./points";
+import { Points } from "./sphere";
 import { gsap } from "gsap";
 export const threeCanvas = () => {
   // 1. 创建场景
