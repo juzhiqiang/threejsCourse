@@ -23,7 +23,7 @@ export const Sphere = (scene: THREE.Scene) => {
   World.gravity.set(0, -9.8, 0);
   // 创建物理世界小球以及物体
   const sphereShape = new CANNON.Sphere(1);
-  const sphereWorldMaterial = new CANNON.Material();
+  const sphereWorldMaterial = new CANNON.Material("sphere");
   const sphereBody = new CANNON.Body({
     shape: sphereShape,
     position: new CANNON.Vec3(0, 0, 0),
@@ -37,15 +37,31 @@ export const Sphere = (scene: THREE.Scene) => {
 
   // 在物理世界中创建地面
   const floorShape = new CANNON.Plane();
+  const floorBodyMaterial = new CANNON.Material("floor");
   const floorBody = new CANNON.Body({
     // 设置为0时保证地面不动
     mass: 0,
     shape: floorShape,
     // 需要与threejs中地面位置同步
     position: new CANNON.Vec3(0, -5, 0),
+    material: floorBodyMaterial,
   });
   floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
   World.addBody(floorBody);
+
+  // 设置两种材质碰撞参数
+  const contactMaterial = new CANNON.ContactMaterial(
+    sphereWorldMaterial,
+    floorBodyMaterial,
+    {
+      // 摩擦系数
+      friction: 0.1,
+      // 弹性
+      restitution: 0.7,
+    }
+  );
+  // 将材质关联设置添加到物理世界
+  World.addContactMaterial(contactMaterial);
 
   // 创建击打声音
   const hitSound = new Audio("/metalHit.mp3");
@@ -56,6 +72,7 @@ export const Sphere = (scene: THREE.Scene) => {
   }) => {
     // 获取碰撞强度
     const impactStrength = e.contact.getImpactVelocityAlongNormal();
+    hitSound.currentTime = 0;
     hitSound.play();
   };
   sphereBody.addEventListener("collide", HitEvent);
