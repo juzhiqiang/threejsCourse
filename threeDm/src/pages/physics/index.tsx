@@ -2,13 +2,11 @@ import { threeInit } from "@/until/threeInit";
 import styles from "./index.less";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import * as CANNON from "cannon-es";
 import { Sphere } from "@/components/sphere";
 
 // 使用cannon引擎
 const Physics = () => {
   const physicsRef = useRef<any>();
-  console.log(CANNON);
   const config: any = {};
   const renderFn = (clock: THREE.Clock) => {
     let deltaTime = clock.getDelta();
@@ -16,8 +14,11 @@ const Physics = () => {
       // 更新物理世界中的物体
       config.World.step(1 / 120, deltaTime);
     }
-    if (config.sphere) {
-      config.sphere.position.copy(config.sphereBody.position);
+    if (config.bodyArr && config.bodyArr.length > 0) {
+      config.bodyArr.forEach((item: { mesh: THREE.CubeCamera; body: any }) => {
+        item.mesh.position.copy(item.body.position);
+        item.mesh.quaternion.copy(item.body.quaternion);
+      });
     }
   };
   useEffect(() => {
@@ -26,10 +27,9 @@ const Physics = () => {
     config.camera = camera;
 
     if (scene) {
-      const { World, sphere, sphereBody } = Sphere(scene);
-      config.sphere = sphere;
+      const { World, bodyArr } = Sphere(scene);
       config.World = World;
-      config.sphereBody = sphereBody;
+      config.bodyArr = bodyArr;
     }
   }, [physicsRef.current]);
 
