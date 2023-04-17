@@ -4,8 +4,11 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 // 顶点着色器
 import basicVertexShader from "./shader/vertex.glsl";
+import deepVertexShader from "./shader/vertexs.glsl";
 // 片元着色器
 import basicFragmentShader from "./shader/fragment.glsl";
+import deepFragmentShader from "./shader/fragments.glsl";
+
 
 // 着色器
 const Shader = () => {
@@ -29,16 +32,18 @@ const Shader = () => {
     // 创建着色器材质
     const shaderMater = new THREE.ShaderMaterial({
       // 顶点着色器
-      vertexShader: basicVertexShader,
+      vertexShader: deepVertexShader,
       // 片元着色器
-      fragmentShader: basicFragmentShader,
+      fragmentShader: deepFragmentShader,
       // wireframe: true,
       side: THREE.DoubleSide,
       // 传入变量启动画
       uniforms: {
+        // 时间
         uTime: {
           value: 0,
         },
+        // 材质
         uTexture: {
           value: texture,
         },
