@@ -2,6 +2,10 @@ precision lowp float;
 varying vec2 vUv;
 varying float vElevation;
 uniform float uTime;
+// 声明随机函数
+float random (vec2 st) {
+    return fract(sin(dot(st.xy,vec2(12.9898,78.233))) * 43758.5453123);
+}
 
 void main(){
     // 通过顶点对应的uv,决定每一个像素在uv图像的位置，通过这个位置决定x,y的颜色
@@ -56,8 +60,36 @@ void main(){
     // gl_FragColor = vec4(vUv,1.0,strength);
 
     // 利用绝对值将负数取消
-    float strength = abs(vUv.x - 0.5);
-    gl_FragColor = vec4(strength,strength,strength,1);
+    // float strength = abs(vUv.x - 0.5);
+    // strength = min(abs(vUv.y - 0.5), strength);
+
+    // 利用取整实现条纹渐变
+    // 向下取整
+    // float strength = floor(vUv.x * 10.0)/10.0;
+
+    // 条纹相乘渐变格子
+    // float strength = floor(vUv.x * 10.0)/10.0 * floor(vUv.y * 10.0)/10.0;
+
+    // 随机效果
+    // float strength = random(vUv);
+
+    // 随机加格子效果
+    // float strength = ceil(vUv.x*10.0)/10.0 * ceil(vUv.y*10.0)/10.0;
+    // strength = random(vec2(strength,strength));
+
+    // 沿着半径变化颜色
+    // float strength = length(vUv);
+
+    // 根据distance计算两个向量间距离
+    // float strength = 1.0 - distance(vUv,vec2(.5,.5));
+    // gl_FragColor = vec4(strength,strength,strength,1);
+
+    // 使用distance相除实现星星效果
+    // float strength = 0.15 / distance(vUv,vec2(.5,.5)) - 1.0;
+
+    // 设置vuv水平/或者竖直变量
+    float strength = 0.15 / distance(vec2(vUv.x,vUv.y * 5.0),vec2(.5, .5)) - 1.0;
+    gl_FragColor = vec4(strength,strength,strength,strength);
 
 
 }
