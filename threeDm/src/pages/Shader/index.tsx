@@ -24,6 +24,7 @@ const Shader = () => {
     const { scene, camera } = threeInit(shaderRef.current, renderFn);
     const material = new THREE.MeshBasicMaterial({
       color: "#00ff00",
+
     });
 
     // 加载纹理
@@ -48,6 +49,7 @@ const Shader = () => {
           value: texture,
         },
       },
+      transparent: true,
     });
     // 创建一个面
     const floor = new THREE.Mesh(
