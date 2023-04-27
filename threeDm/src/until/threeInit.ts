@@ -1,4 +1,5 @@
 import * as THREE from "three";
+// @ts-ignore
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 export const threeInit = (
   dom: Document,
@@ -6,6 +7,8 @@ export const threeInit = (
 ): {
   scene?: THREE.Scene;
   camera?: THREE.Camera;
+  renderer?: THREE.Renderer;
+  controls?: any;
 } => {
   if (!dom) return {};
   const scene = new THREE.Scene();
@@ -42,7 +45,7 @@ export const threeInit = (
   let clock = new THREE.Clock();
 
   const render = () => {
-    renderFn(clock);
+    renderFn(clock, controls);
 
     renderer.render(scene, camera);
     requestAnimationFrame(render);
@@ -50,5 +53,5 @@ export const threeInit = (
 
   render();
 
-  return { scene, camera };
+  return { scene, camera, renderer, controls };
 };
