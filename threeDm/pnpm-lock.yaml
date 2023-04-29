@@ -1,10 +1,12 @@
 lockfileVersion: 5.4
 
 specifiers:
+  '@types/dat.gui': ^0.7.9
   '@types/react': ^18.0.0
   '@types/react-dom': ^18.0.0
   '@types/three': ^0.150.1
   cannon-es: ^0.20.0
+  dat.gui: ^0.7.9
   glslify: ^7.1.1
   glslify-loader: ^2.0.0
   gsap: ^3.11.5
@@ -16,6 +18,7 @@ specifiers:
 
 dependencies:
   cannon-es: registry.npmjs.org/cannon-es/0.20.0
+  dat.gui: registry.npmjs.org/dat.gui/0.7.9
   glslify: registry.npmjs.org/glslify/7.1.1
   glslify-loader: registry.npmjs.org/glslify-loader/2.0.0
   gsap: registry.npmjs.org/gsap/3.11.5
@@ -25,6 +28,7 @@ dependencies:
   umi: registry.npmjs.org/umi/4.0.64_vr2f2vkaw4wweh6xlhmevaicyy
 
 devDependencies:
+  '@types/dat.gui': registry.npmjs.org/@types/dat.gui/0.7.9
   '@types/react': registry.npmjs.org/@types/react/18.0.33
   '@types/react-dom': registry.npmjs.org/@types/react-dom/18.0.11
   '@types/three': registry.npmjs.org/@types/three/0.150.1
@@ -1902,6 +1906,12 @@ packages:
       '@babel/types': registry.npmjs.org/@babel/types/7.21.4
     dev: false
 
+  registry.npmjs.org/@types/dat.gui/0.7.9:
+    resolution: {integrity: sha512-UiqZasQIask5cUwWOO6BgOjP1dNj9ChYtmeAb4WTKs5IJ7ha3ATRTeXY7/TzlmEZznh40lS6Ov5BdNA+tU+fWQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/dat.gui/-/dat.gui-0.7.9.tgz}
+    name: '@types/dat.gui'
+    version: 0.7.9
+    dev: true
+
   registry.npmjs.org/@types/graceful-fs/4.1.6:
     resolution: {integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/graceful-fs/-/graceful-fs-4.1.6.tgz}
     name: '@types/graceful-fs'
@@ -3776,6 +3786,12 @@ packages:
     resolution: {integrity: sha512-qv8s+G47V6Hq+g2kRE5th+ASzzrL7b6l+tap1DHKK25ZQJv3yIFhH96XaQ7NGL+zRW3t/RDbweJf/dJDe5Z5KA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/current-script-polyfill/-/current-script-polyfill-1.0.0.tgz}
     name: current-script-polyfill
     version: 1.0.0
+    dev: false
+
+  registry.npmjs.org/dat.gui/0.7.9:
+    resolution: {integrity: sha512-sCNc1OHobc+Erc1HqiswYgHdVNpSJUlk/Hz8vzOCsER7rl+oF/4+v8GXFUyCgtXpoCX6+bnmg07DedLvBLwYKQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/dat.gui/-/dat.gui-0.7.9.tgz}
+    name: dat.gui
+    version: 0.7.9
     dev: false
 
   registry.npmjs.org/data-uri-to-buffer/4.0.1:
