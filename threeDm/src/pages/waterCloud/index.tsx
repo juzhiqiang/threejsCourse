@@ -20,9 +20,83 @@ import { gsap } from "gsap";
 export default function WaterCloud() {
   const shaderRef = useRef<any>();
   const gui = new dat.GUI();
+  const params = {
+    // 频率
+    wWaresFrequency: 20.0,
+    // 波浪高度
+    uScale: 0.1,
+    uXzScale: 1.0,
+    // 噪声频率
+    uNoiseFrequency: 10,
+    // 噪声缩放比例
+    uNoiseScale: 0.1,
+    uTime: 0,
+    // 低位颜色
+    uLowColor: "#ff0000",
+    // 高位颜色
+    uHighColor: "#ff6611",
+    // 水流x轴速度
+    uXspeed: 1,
+    uZspeed: 1,
+    // 噪音速度
+    uNoiseSpeed: 1,
+    // 烟雾透明度
+    uOpacity: 1,
+  };
+
+  // 创建着色器材质
+  const shaderMater = new THREE.ShaderMaterial({
+    // 顶点着色器
+    vertexShader: vertexShader,
+    // 片元着色器
+    fragmentShader: fragmentShader,
+    // wireframe: true,
+    side: THREE.DoubleSide,
+    // 传入变量启动画
+    uniforms: {
+      wWaresFrequency: {
+        value: params.wWaresFrequency,
+      },
+      uScale: {
+        value: params.uScale,
+      },
+      uXzScale: {
+        value: params.uXzScale,
+      },
+      uNoiseFrequency: {
+        value: params.uNoiseFrequency,
+      },
+      uNoiseScale: {
+        value: params.uNoiseScale,
+      },
+      uTime: {
+        value: params.uTime,
+      },
+      uHighColor: {
+        value: new THREE.Color(params.uHighColor),
+      },
+      uLowColor: {
+        value: new THREE.Color(params.uLowColor),
+      },
+      uXspeed: {
+        value: params.uXspeed,
+      },
+      uZspeed: {
+        value: params.uZspeed,
+      },
+      uNoiseSpeed: {
+        value: params.uNoiseSpeed,
+      },
+      uOpacity: {
+        value: params.uOpacity,
+      },
+    },
+    transparent: true,
+  });
 
   const renderFn = (clock: THREE.Clock, controls: any) => {
-    let deltaTime = clock.getElapsedTime();
+    let elapsedtime = clock.getElapsedTime();
+    shaderMater.uniforms.uTime.value = elapsedtime;
     controls.update();
   };
   useEffect(() => {
@@ -31,46 +105,6 @@ export default function WaterCloud() {
       renderFn
     );
 
-    const params = {
-      // 频率
-      wWaresFrequency: 20.0,
-      // 波浪高度
-      uScale: 0.1,
-      uXzScale: 1.0,
-      // 噪声频率
-      uNoiseFrequency: 10,
-      // 噪声缩放比例
-      uNoiseScale: 0.1,
-    };
-
-    // 创建着色器材质
-    const shaderMater = new THREE.ShaderMaterial({
-      // 顶点着色器
-      vertexShader: vertexShader,
-      // 片元着色器
-      fragmentShader: fragmentShader,
-      // wireframe: true,
-      side: THREE.DoubleSide,
-      // 传入变量启动画
-      uniforms: {
-        wWaresFrequency: {
-          value: params.wWaresFrequency,
-        },
-        uScale: {
-          value: params.uScale,
-        },
-        uXzScale: {
-          value: params.uXzScale,
-        },
-        uNoiseFrequency: {
-          value: params.uNoiseFrequency,
-        },
-        uNoiseScale: {
-          value: params.uNoiseScale,
-        },
-      },
-      transparent: true,
-    });
     // gui ------------------------------------------------------------------------------------------- start
     // gui -------------------------------------------------------------------------------------------
     // gui -------------------------------------------------------------------------------------------
@@ -84,7 +118,7 @@ export default function WaterCloud() {
       });
     gui
       .add(params, "uScale")
-      .min(0.1)
+      .min(0.01)
       .max(1)
       .step(0.001)
       .onChange((value: number) => {
@@ -113,6 +147,44 @@ export default function WaterCloud() {
       .step(0.001)
       .onChange((value: number) => {
         shaderMater.uniforms.uNoiseScale.value = value;
+      });
+    gui.addColor(params, "uLowColor").onFinishChange((value) => {
+      shaderMater.uniforms.uLowColor.value = new THREE.Color(value);
+    });
+    gui.addColor(params, "uHighColor").onFinishChange((value) => {
+      shaderMater.uniforms.uHighColor.value = new THREE.Color(value);
+    });
+    gui
+      .add(params, "uZspeed")
+      .min(0)
+      .max(5)
+      .step(0.1)
+      .onChange((value: number) => {
+        shaderMater.uniforms.uZspeed.value = value;
+      });
+    gui
+      .add(params, "uXspeed")
+      .min(0)
+      .max(5)
+      .step(0.1)
+      .onChange((value: number) => {
+        shaderMater.uniforms.uXspeed.value = value;
+      });
+    gui
+      .add(params, "uNoiseSpeed")
+      .min(0)
+      .max(5)
+      .step(0.1)
+      .onChange((value: number) => {
+        shaderMater.uniforms.uNoiseSpeed.value = value;
+      });
+    gui
+      .add(params, "uOpacity")
+      .min(0)
+      .max(1)
+      .step(0.1)
+      .onChange((value: number) => {
+        shaderMater.uniforms.uOpacity.value = value;
       });
     // gui -------------------------------------------------------------------------------------------
     // gui -------------------------------------------------------------------------------------------

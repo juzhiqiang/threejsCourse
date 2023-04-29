@@ -3,6 +3,11 @@ uniform float uScale;
 uniform float uXzScale;
 uniform float uNoiseFrequency;
 uniform float uNoiseScale;
+uniform float uTime;
+uniform float uXspeed;
+uniform float uZspeed;
+uniform float uNoiseSpeed;
+uniform float uOpacity;
 
 // 计算高度传给片元着色器
 varying float vElevation;
@@ -84,11 +89,11 @@ void main(){
     vec4 modelPosition = modelMatrix * vec4(position,1.0);
 
     // 波浪起伏效果,波浪x轴跟z轴高度
-    float elevation = sin(modelPosition.x * wWaresFrequency) * sin(modelPosition.z * wWaresFrequency * uXzScale);
+    float elevation = sin(modelPosition.x * wWaresFrequency * uXspeed) * sin(modelPosition.z * wWaresFrequency * uXzScale + uTime * uZspeed);
     // 给波浪设置噪声，打造无序效果
-    elevation += abs(cnoise(vec2(modelPosition.xz * uNoiseFrequency)))  * uNoiseScale;
+    elevation += -abs(cnoise(vec2(modelPosition.xz * uNoiseFrequency + uTime * uNoiseSpeed)))  * uNoiseScale;
+    vElevation = elevation;
     elevation *= uScale;
     modelPosition.y += elevation;
-    vElevation = elevation;
     gl_Position = projectionMatrix * viewMatrix * modelPosition;
 }
