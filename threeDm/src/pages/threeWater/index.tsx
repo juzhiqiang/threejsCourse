@@ -26,7 +26,6 @@ export default function ThreeWater() {
   const gui = new dat.GUI();
 
   const renderFn = (clock: THREE.Clock, controls: any) => {
-    let elapsedtime = clock.getElapsedTime();
     controls.update();
   };
   useEffect(() => {
@@ -35,24 +34,43 @@ export default function ThreeWater() {
       renderFn
     );
 
-    const water = new Water(new THREE.PlaneGeometry(1, 1, 1024, 1024), {
-      color: "#ffffff",
-      scale: 1,
-      // 设置水纹方向
-      flowDirection: new THREE.Vector2(1, 1),
-      textureHeight: 1024,
-      textureWidth: 1024,
+    // 加载场景背景
+    const rgbeLoader = new RGBELoader();
+    rgbeLoader.loadAsync("/hdr/050.hdr").then((texture: THREE.Texture) => {
+      texture.mapping = THREE.EquirectangularReflectionMapping;
+      if (scene) {
+        // scene.background = texture;
+        scene.environment = texture;
+      }
     });
 
-    // 创建面
-    const plane = new THREE.Mesh(
-      new THREE.PlaneGeometry(1, 1, 512, 512),
-      new THREE.MeshBasicMaterial({
-        color: 0xffff00,
-      })
+    // 加载浴缸
+    const gltfLoader = new GLTFLoader();
+    gltfLoader.load(
+      "/mode/yugang.glb",
+      (gltf: { scene: THREE.Object3D<THREE.Event> }) => {
+        console.log(gltf.scene.position.set(0, -200, 0));
+        const yugang = gltf.scene.children[0];
+        // @ts-ignore
+        yugang.material.side = THREE.DoubleSide;
+        const waterGeometry = gltf.scene.children[1].geometry;
+        const water = new Water(waterGeometry, {
+          color: "#ffffff",
+          scale: 1,
+          flowDirection: new THREE.Vector2(1, 1),
+          textureHeight: 1024,
+          textureWidth: 1024,
+        });
+        scene?.add(water);
+        scene?.add(yugang);
+      }
     );
-    plane.rotation.x = -Math.PI / 2;
-    scene?.add(plane);
+
+    const light = new THREE.AmbientLight(0xffffff);
+    light.intensity = 10;
+    scene?.add(light);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    scene?.add(directionalLight);
   }, [shaderRef.current]);
 
   return <div className={styles.main} ref={shaderRef}></div>;
