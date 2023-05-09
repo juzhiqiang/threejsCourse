@@ -9,3 +9,16 @@ threejs教程学习代码
 2. pnpm i
 3. pnpm start
 
+## threejs示例
+### 启动项目
+1. cd ./threeDm
+2. pnpm i
+3. pnpm start
+
+### 内容
+1. 孔明灯效果 路由：localhost:8000/kongmingLantern
+2. 水云效果过 路由：localhost:8000/waterCloud
+3. theejs封装水效果 路由：localhost:8000/threeWater
+3. 着色器效果 路由：localhost:8000/shader
+4. 点材质着色器效果 路由：localhost:8000/pointShader
+5. 点材质烟花效果   路由：localhost:8000/fireworks
