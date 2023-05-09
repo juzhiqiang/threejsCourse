@@ -2,8 +2,6 @@ import { threeInit } from "@/until/threeInit";
 import styles from "./index.less";
 import * as THREE from "three";
 import { useEffect, useRef } from "react";
-// @ts-ignore
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 // 顶点着色器
 // @ts-ignore
 import vertexShader from "./shader/vertex.glsl";
@@ -14,6 +12,9 @@ import fragmentShader from "./shader/fragment.glsl";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 // @ts-ignore
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+// 导入水模块
+// @ts-ignore
+import { Water } from "three/examples/jsm/objects/Water2";
 import { gsap } from "gsap";
 import Firework from "./firework";
 
@@ -24,8 +25,11 @@ export default function HomePage() {
   const renderFn = (clock: THREE.Clock, controls: any) => {
     controls.update();
     // 更新烟花状态
-    fireworks.forEach((item) => {
-      item.update();
+    fireworks.forEach((item, i: number) => {
+      const type = item.update();
+      if (type === "remove") {
+        fireworks.splice(i, 1);
+      }
     });
   };
   useEffect(() => {
@@ -33,9 +37,6 @@ export default function HomePage() {
       shaderRef.current,
       renderFn
     );
-    const material = new THREE.MeshBasicMaterial({
-      color: "#00ff00",
-    });
 
     // 创建环境纹理
     const rgbeLoader = new RGBELoader();
@@ -60,63 +61,27 @@ export default function HomePage() {
       renderer.toneMappingExposure = 0.2;
     }
 
-    // 创建着色器材质
-    const shaderMater = new THREE.ShaderMaterial({
-      // 顶点着色器
-      vertexShader: vertexShader,
-      // 片元着色器
-      fragmentShader: fragmentShader,
-      // wireframe: true,
-      side: THREE.DoubleSide,
-      // 传入变量启动画
-      uniforms: {},
-      // transparent: true,
-    });
-
     // 载入孔明灯
     const gltfLoader = new GLTFLoader();
     // 灯光
     let LightBox = null;
     gltfLoader.load(
-      "/mode/flyLight.glb",
+      "./mode/newyears_min.glb",
       (gltf: { scene: THREE.Object3D<THREE.Event> }) => {
-        if (scene) {
-          scene.add(gltf.scene);
-          LightBox = gltf.scene.children[0];
-          // @ts-ignore;
-          LightBox.material = shaderMater;
-
-          // 对孔明灯克隆
-          for (let i = 0; i < 150; i++) {
-            let flyLight = gltf.scene.clone();
-            let x = (Math.random() - 0.5) * 300;
-            let y = Math.random() * 60 + 25;
-            let z = (Math.random() - 0.5) * 300;
-            flyLight.position.set(x, y, z);
-            gsap.to(flyLight.rotation, {
-              y: 2 * Math.PI,
-              duration: 5 + Math.random() * 20,
-              repeat: -1,
-            });
-            gsap.to(flyLight.position, {
-              x: "+=" + Math.random() * 30,
-              y: "+=" + Math.random() * 10,
-              duration: 5 + Math.random() * 10,
-              yoyo: true,
-            });
-            scene.add(flyLight);
-          }
-        }
+        scene?.add(gltf.scene);
+        // 创建水面
+        const waterGeometry = new THREE.PlaneGeometry(100, 100);
+        let water = new Water(waterGeometry, {
+          scale: 4,
+          textureWidth: 1024,
+          textureHeight: 1024,
+        });
+        // 要比物体高一点不然会争渲染层级 出现闪烁效果
+        water.position.y = 1;
+        water.rotation.x = -Math.PI / 2;
+        scene?.add(water);
       }
     );
-
-    // 控制器设置
-    if (controls) {
-      // controls.autoRotate = true;
-      // controls.autoRotateSpeed = 1.0;
-      // controls.maxPolarAngle = (Math.PI / 4) * 3;
-      // controls.minPolarAngle = (Math.PI / 4) * 3;
-    }
 
     // 创建烟花
     let createFireWord = () => {

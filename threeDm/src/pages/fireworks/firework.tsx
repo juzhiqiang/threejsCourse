@@ -19,12 +19,18 @@ export default class Firework {
   fireworkMaterail: THREE.ShaderMaterial;
   fireworks: THREE.Points<THREE.BufferGeometry, THREE.ShaderMaterial>;
   color: THREE.Color;
+  linstener: THREE.AudioListener;
+  sound: THREE.Audio<GainNode>;
+  play: boolean;
+  seedSound: any;
+  seedPlay: boolean;
   constructor(
     color: THREE.ColorRepresentation | undefined,
     to: { x: number; y: number; z: number },
     form: { x: number; y: number; z: number } = { x: 0, y: 0, z: 0 }
   ) {
     this.scene = undefined;
+    this.play = false;
     // 创建烟花发射效果
     this.startGeometry = new THREE.BufferGeometry();
     this.color = new THREE.Color(color);
@@ -130,6 +136,26 @@ export default class Firework {
       this.fireworkGeometry,
       this.fireworkMaterail
     );
+
+    // 创建音效
+    this.linstener = new THREE.AudioListener();
+    this.sound = new THREE.Audio(this.linstener);
+    this.seedSound = new THREE.Audio(this.linstener);
+    // 音频加载器
+    const audioLoader = new THREE.AudioLoader();
+    audioLoader.load(
+      `./audio/pow${Math.floor(Math.random() * 4) + 1}.ogg`,
+      (buffer) => {
+        this.sound.setBuffer(buffer);
+        this.sound.setLoop(false);
+        this.sound.setVolume(1);
+      }
+    );
+    audioLoader.load(`./audio/send.mp3`, (buffer) => {
+      this.seedSound.setBuffer(buffer);
+      this.seedSound.setLoop(false);
+      this.seedSound.setVolume(Math.random() + 0.3);
+    });
   }
 
   public addScene(scene: THREE.Scene | undefined, camera: THREE.Camera) {
@@ -144,6 +170,10 @@ export default class Firework {
     if (elapsedTime < 1) {
       this.startMaterial.uniforms.uTime.value = elapsedTime;
       this.startMaterial.uniforms.uSize.value = 20.0;
+      if (!this.seedSound.isPlaying && !this.seedPlay && elapsedTime > 0.1) {
+        this.seedSound.play();
+        this.seedPlay = true;
+      }
     } else {
       const time = elapsedTime - 1;
       this.startMaterial.uniforms.uSize.value = 0.0;
@@ -157,10 +187,18 @@ export default class Firework {
         this.fireworks.clear();
         this.fireworkGeometry.dispose();
         this.fireworkMaterail.dispose();
+        // 使用完成后移除对应内容
+        this.scene?.remove(this.fireworks);
+        this.scene?.remove(this.startPoint);
+        return "remove";
       } else {
         //   设置烟花显示
         this.fireworkMaterail.uniforms.uSize.value = 20.0;
         this.fireworkMaterail.uniforms.uTime.value = time;
+        if (!this.sound.isPlaying && !this.play) {
+          this.sound.play();
+          this.play = true;
+        }
       }
     }
   }
