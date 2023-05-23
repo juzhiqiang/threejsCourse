@@ -45,7 +45,7 @@ export const threeInit = (
   let clock = new THREE.Clock();
 
   const render = () => {
-    renderFn(clock, controls);
+    renderFn(clock, controls, scene, camera);
 
     renderer.render(scene, camera);
     requestAnimationFrame(render);

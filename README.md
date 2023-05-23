@@ -22,3 +22,4 @@ threejs教程学习代码
 3. 着色器效果 路由：localhost:8000/shader
 4. 点材质着色器效果 路由：localhost:8000/pointShader
 5. 点材质烟花效果   路由：localhost:8000/fireworks
+6. html混合3d效果   路由：localhost:8000/htmlAnd3d

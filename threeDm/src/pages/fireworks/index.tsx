@@ -58,7 +58,7 @@ export default function HomePage() {
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       // 设置曝光程度
       // @ts-ignore;
-      renderer.toneMappingExposure = 0.2;
+      renderer.toneMappingExposure = 0.5;
     }
 
     // 载入孔明灯

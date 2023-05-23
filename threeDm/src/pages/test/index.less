@@ -1,0 +1,49 @@
+table {
+  border-collapse: collapse;
+  th {
+    height: 40px;
+    background: #f1f2f6;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    height: 40px;
+    font-family: "Source Han Sans CN";
+    font-weight: 500;
+    font-size: 14px;
+    color: #666666;
+    padding: 0 8px;
+    box-sizing: border-box;
+    text-align: left;
+  }
+  .table-week {
+    width: 58px;
+  }
+}
+
+td {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 8px;
+  box-sizing: border-box;
+
+  height: 38px;
+  font-weight: 400;
+  font-size: 14px;
+  color: #262626;
+  .week-add {
+    visibility: hidden;
+    margin-top: 10px;
+  }
+  &:hover {
+    background: #f8f8f9;
+    box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    .week-add {
+      visibility: visible;
+      color: #3370ff;
+      cursor: pointer;
+    }
+  }
+}
+
+.week-count {
+  background: #f8f8f9;
+  box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0.04);
+}
