@@ -17,10 +17,12 @@ export default function HomePage() {
     moon: THREE.Object3D<THREE.Event> | null;
     labelRenderer: any;
     chinaLabel: any;
+    curve: any;
   }>({
     labelRenderer: null,
     moon: null,
     chinaLabel: null,
+    curve: null,
   });
 
   const renderFn = (
@@ -31,12 +33,7 @@ export default function HomePage() {
   ) => {
     controls.update();
     const elapsed = clock.getElapsedTime();
-    // 月亮运动
-    datas.current.moon?.position.set(
-      Math.sin(elapsed) * 5,
-      0,
-      Math.cos(elapsed) * 5
-    );
+
     datas.current.labelRenderer?.render(scene, camera);
 
     if (datas.current.chinaLabel) {
@@ -58,6 +55,19 @@ export default function HomePage() {
           datas.current.chinaLabel.element.classList.add("visible");
         }
       }
+    }
+
+    if (datas.current.curve) {
+      const time = (elapsed / 10) % 1;
+      const point = datas.current.curve.getPoint(time);
+      // 月亮运动 围绕地球
+      // datas.current.moon?.position.set(
+      //   Math.sin(elapsed) * 5,
+      //   0,
+      //   Math.cos(elapsed) * 5
+      // );
+      // 围绕特定轨迹
+      datas.current.moon?.position.copy(point);
     }
   };
 
@@ -144,6 +154,24 @@ export default function HomePage() {
 
     // 重新设置轨道控制器
     new OrbitControls(camera, datas.current.labelRenderer.domElement);
+
+    // 声明轨迹曲线
+    datas.current.curve = new THREE.CatmullRomCurve3(
+      [
+        new THREE.Vector3(-10, 0, 10),
+        new THREE.Vector3(-5, 5, 5),
+        new THREE.Vector3(0, 0, 5),
+        new THREE.Vector3(5, -5, 5),
+        new THREE.Vector3(-10, 0, 10),
+      ],
+      true
+    );
+    // 多少个线段形成曲线
+    const points = datas.current.curve.getPoints(500);
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
+    const curveObject = new THREE.Line(geometry, material);
+    scene?.add(curveObject);
   }, [shaderRef.current]);
 
   return <div className={styles.main} ref={shaderRef}></div>;
