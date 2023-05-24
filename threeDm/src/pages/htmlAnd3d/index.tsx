@@ -1,6 +1,9 @@
 import { threeInit } from "@/until/threeInit";
 import styles from "./index.less";
+import "./scence.less";
 import * as THREE from "three";
+// @ts-ignore
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import {
   CSS2DRenderer,
   CSS2DObject,
@@ -13,12 +16,19 @@ export default function HomePage() {
   const datas = useRef<{
     moon: THREE.Object3D<THREE.Event> | null;
     labelRenderer: any;
+    chinaLabel: any;
   }>({
     labelRenderer: null,
     moon: null,
+    chinaLabel: null,
   });
-  // 管理烟花
-  const renderFn = (clock: THREE.Clock, controls: any, scene: any, camera: any) => {
+
+  const renderFn = (
+    clock: THREE.Clock,
+    controls: any,
+    scene: any,
+    camera: any
+  ) => {
     controls.update();
     const elapsed = clock.getElapsedTime();
     // 月亮运动
@@ -28,13 +38,37 @@ export default function HomePage() {
       Math.cos(elapsed) * 5
     );
     datas.current.labelRenderer?.render(scene, camera);
+
+    if (datas.current.chinaLabel) {
+      const chinaPostion: any = datas.current.chinaLabel.position.clone();
+      // 计算标签跟摄像机距离
+      const labelDistance = chinaPostion.distanceTo(camera?.position);
+      chinaPostion.project(camera);
+      // 射线的碰撞检测
+      raycaster.setFromCamera(chinaPostion, camera);
+      const intersects = raycaster.intersectObjects(scene?.children, true);
+      // 检测是否碰撞到物体
+      if (intersects.length === 0) {
+        datas.current.chinaLabel.element.classList.add("visible");
+      } else {
+        const minDistance = intersects[0].distance;
+        if (minDistance < labelDistance) {
+          datas.current.chinaLabel.element.classList.remove("visible");
+        } else {
+          datas.current.chinaLabel.element.classList.add("visible");
+        }
+      }
+    }
   };
+
+  // 实例化射线
+  const raycaster = new THREE.Raycaster();
+
   useEffect(() => {
     const { scene, camera, renderer, controls } = threeInit(
       shaderRef.current,
       renderFn
     );
-
     camera?.position.set(0, 5, -10);
 
     const textureLoader = new THREE.TextureLoader();
@@ -63,7 +97,7 @@ export default function HomePage() {
       normalScale: new THREE.Vector2(0.85, 0.85),
     });
     const echart = new THREE.Mesh(echartGeometry, echartMaterial);
-    echart.rotation.y = Math.PI;
+    // echart.rotation.y = Math.PI;
     scene?.add(echart);
 
     // 加载月亮
@@ -83,7 +117,23 @@ export default function HomePage() {
     echartLabel.position.set(0, 1, 0);
     echart.add(echartLabel);
 
-    // 实例化css2D渲染器
+    // 月球提示标签
+    const moontDiv = document.createElement("div");
+    moontDiv.className = "label";
+    moontDiv.innerHTML = "月球";
+    const moontLabel = new CSS2DObject(moontDiv);
+    moontLabel.position.set(0, 0.3, 0);
+    datas.current.moon.add(moontLabel);
+
+    // 中国提示标签
+    const chinaDiv = document.createElement("div");
+    chinaDiv.className = "label1";
+    chinaDiv.innerHTML = "中国";
+    datas.current.chinaLabel = new CSS2DObject(chinaDiv);
+    datas.current.chinaLabel.position.set(-0.3, 0.8, -1);
+    echart.add(datas.current.chinaLabel);
+
+    // 实例化csdatas.current.s2D渲染器
     datas.current.labelRenderer = new CSS2DRenderer();
     datas.current.labelRenderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(datas.current.labelRenderer.domElement);
@@ -91,6 +141,9 @@ export default function HomePage() {
     datas.current.labelRenderer.domElement.style.top = "0px";
     datas.current.labelRenderer.domElement.style.left = "0px";
     datas.current.labelRenderer.domElement.style.zIndex = "10";
+
+    // 重新设置轨道控制器
+    new OrbitControls(camera, datas.current.labelRenderer.domElement);
   }, [shaderRef.current]);
 
   return <div className={styles.main} ref={shaderRef}></div>;

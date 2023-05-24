@@ -3,7 +3,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 export const threeInit = (
   dom: Document,
-  renderFn: Function
+  renderFn: Function,
+  controlsRender?: any
 ): {
   scene?: THREE.Scene;
   camera?: THREE.Camera;
@@ -37,7 +38,10 @@ export const threeInit = (
   scene.add(axesHelper);
 
   // 创建轨道控制器
-  const controls = new OrbitControls(camera, renderer.domElement);
+  const controls = new OrbitControls(
+    camera,
+    controlsRender || renderer.domElement
+  );
   // 设置控制器的阻尼，模仿惯性想过
   controls.enableDamping = true;
 
