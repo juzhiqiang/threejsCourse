@@ -17,7 +17,7 @@ export const threeInit = (
     75,
     window.innerWidth / window.innerHeight,
     0.1,
-    300
+    1000
   );
 
   // 设置相机位置
