@@ -14,6 +14,13 @@ export default defineConfig({
       .end()
       .use("raw-loader")
       .loader("raw-loader")
-      .end()
+      .end();
+  },
+  proxy: {
+    "/api": {
+      target: "http://api.cpengx.cn",
+      changeOrigin: true,
+      pathRewrite: { "^/api": "" },
+    },
   },
 });
