@@ -2,7 +2,7 @@
  * @Author: juzhiqinag 1020814597@qq.com
  * @Date: 2023-05-29 22:46:09
  * @LastEditors: juzhiqinag 1020814597@qq.com
- * @LastEditTime: 2023-05-30 00:39:15
+ * @LastEditTime: 2023-05-31 01:15:24
  * @FilePath: \threejsCourse\threeDm\src\pages\dataHouse\index.tsx
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -24,6 +24,8 @@ import { MouseLinster } from "./mouseLinster";
 // @ts-ignore
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import RoomShapeMesh from "./threeMesh/RoomShapeMesh";
+import { WallShaderMaterial } from "./threeMesh/WallshaderMaterial";
+import Wall from "./threeMesh/Wall";
 
 const ViewHouse = () => {
   const viewHome = useRef<HTMLDivElement | null>(null);
@@ -77,6 +79,7 @@ const ViewHouse = () => {
     scene.environment = texture;
 
     // 获取接口数据
+    let roomIdToPanorama: any = {};
     fetch("/api/three0313/demo720.json")
       .then((res) => res.json())
       .then((obj) => {
@@ -88,9 +91,40 @@ const ViewHouse = () => {
           let roomMesh = new RoomShapeMesh(room);
           let roomMesh2 = new RoomShapeMesh(room, true);
           scene.add(roomMesh, roomMesh2);
-          console.log(room);
+
+          // 房间全景图映射
+          obj.panoramaLocation.forEach(
+            (roomImgs: { material: THREE.ShaderMaterial; roomId: any }) => {
+              if (roomImgs.roomId === room.roomId) {
+                let material = WallShaderMaterial(roomImgs);
+                roomImgs.material = material;
+                roomIdToPanorama[room.roomId] = roomImgs;
+              }
+            }
+          );
+
+          roomMesh.material = roomIdToPanorama[room.roomId].material;
+          roomMesh.material.side = THREE.DoubleSide;
+          roomMesh2.material = roomIdToPanorama[room.roomId].material.clone();
+          roomMesh2.material.side = THREE.FrontSide;
         }
-        console.log(obj);
+
+        // 创建墙
+        obj.wallRelation.forEach(
+          (wall: { wallPoints: any; faceRelation: any }) => {
+            let wallPoints = wall.wallPoints;
+            let faceRelation = wall.faceRelation;
+
+            faceRelation.forEach(
+              (item: { panorama: any; roomId: string | number }) => {
+                item.panorama = roomIdToPanorama[item.roomId];
+              }
+            );
+
+            let mesh = new Wall(wallPoints, faceRelation);
+            scene.add(mesh);
+          }
+        );
       });
 
     // 统一监听进度
