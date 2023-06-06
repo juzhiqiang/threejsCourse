@@ -45,7 +45,6 @@ const ViewHouse = () => {
       0.1,
       1000
     );
-    console.log(camera)
     // 设置相机初始w位置
     camera.position.set(0, 2, 5.5);
     // 初始化渲染器
