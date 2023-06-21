@@ -206,7 +206,7 @@ export const addToTopLine = (shader: {
     `
      float ToTopLineIndex = -(vPosition.y  - uToTopLineTime) * (vPosition.y - uToTopLineTime) + uToTopLineWidth; 
      if(ToTopLineIndex > 0.0) {
-      gl_FragColor = mix(gl_FragColor,vec4(1,1,0,1),ToTopLineIndex/uToTopLineWidth);
+      gl_FragColor = mix(gl_FragColor,vec4(1,0,0,1),ToTopLineIndex/uToTopLineWidth);
      };
      //#end#"`
   );

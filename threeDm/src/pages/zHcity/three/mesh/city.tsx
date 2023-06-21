@@ -14,6 +14,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as THREE from "three";
 import { scene } from "../scene";
 import { modifyCityMaterial } from "../modify/cityMaterial";
+import { FlyLine } from "./FlyLine";
 /**
  * @description: 创建城市
  * @return {*}
@@ -34,5 +35,9 @@ export const createCity = () => {
       }
     );
     scene.add(gltf.scene);
+
+    // 添加飞线
+    const flyLine = new FlyLine();
+    scene.add(flyLine.mesh);
   });
 };
