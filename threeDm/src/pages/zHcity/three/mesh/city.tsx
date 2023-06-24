@@ -17,6 +17,7 @@ import { modifyCityMaterial } from "../modify/cityMaterial";
 import { FlyLine } from "./FlyLine";
 import { FlyLineShader } from "./FlyLineShader";
 import MeshLine from "./line";
+import LineWall from "./LineWall";
 /**
  * @description: 创建城市
  * @return {*}
@@ -59,5 +60,9 @@ export const createCity = () => {
     // 添加着色器飞线
     const flyLineShader = new FlyLineShader();
     scene.add(flyLineShader.mesh);
+
+    // 添加光墙
+    const light = new LineWall();
+    scene.add(light.mesh);
   });
 };

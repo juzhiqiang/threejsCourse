@@ -1,5 +1,5 @@
 import * as THREE from "three";
-// 线框
+// 实现模型线框
 export default class MeshLine {
   mesh: THREE.LineSegments<THREE.EdgesGeometry<any>, THREE.LineBasicMaterial>;
     geomentry: THREE.EdgesGeometry<any>;
