@@ -18,6 +18,7 @@ import { FlyLine } from "./FlyLine";
 import { FlyLineShader } from "./FlyLineShader";
 import MeshLine from "./line";
 import LineWall from "./LineWall";
+import LightRadar from "./LightRadar";
 /**
  * @description: 创建城市
  * @return {*}
@@ -64,5 +65,9 @@ export const createCity = () => {
     // 添加光墙
     const light = new LineWall();
     scene.add(light.mesh);
+
+    // 添加雷达
+    const radar = new LightRadar();
+    scene.add(radar.mesh);
   });
 };
