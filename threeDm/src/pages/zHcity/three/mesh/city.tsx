@@ -19,6 +19,7 @@ import { FlyLineShader } from "./FlyLineShader";
 import MeshLine from "./line";
 import LineWall from "./LineWall";
 import LightRadar from "./LightRadar";
+import AlarmSprite from "./AlarmSprite";
 /**
  * @description: 创建城市
  * @return {*}
@@ -69,5 +70,12 @@ export const createCity = () => {
     // 添加雷达
     const radar = new LightRadar();
     scene.add(radar.mesh);
+
+    // 添加警告标识
+    const alarmSprite = new AlarmSprite();
+    scene.add(alarmSprite.mesh);
+    alarmSprite.onClick((res) => {
+      console.log(res);
+    });
   });
 };
