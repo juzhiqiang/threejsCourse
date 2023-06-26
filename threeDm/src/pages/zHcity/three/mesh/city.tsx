@@ -74,7 +74,7 @@ export const createCity = () => {
     // 添加警告标识
     const alarmSprite = new AlarmSprite();
     scene.add(alarmSprite.mesh);
-    alarmSprite.onClick((res) => {
+    alarmSprite.onClick((res: any) => {
       console.log(res);
     });
   });
