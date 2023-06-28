@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "antd": "4.24.8",
+    "axios": "^1.4.0",
     "cannon-es": "^0.20.0",
     "dat.gui": "^0.7.9",
     "glslify": "^7.1.1",

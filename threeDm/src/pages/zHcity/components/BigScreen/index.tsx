@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./index.less";
-const BigScreen = () => {
+import { getSmartCityList } from "../../Api";
+const BigScreen = (props: any) => {
   const [data, setData] = useState([
     {
       name: "iot",
@@ -46,7 +47,7 @@ const BigScreen = () => {
           ))}
         </div>
         <div className={styles.right}>
-          {data.map((item, i) => (
+          {(props.data || []).map((item: any, i) => (
             <div className={`${styles.cityEvent} ${styles.list}`}>
               <h3>
                 <span>事件列表</span>
@@ -55,14 +56,10 @@ const BigScreen = () => {
                 <li>
                   <h1>
                     <div>
-                      <span>
-                        {item.name}-
-                        {i}
-                      </span>
+                      <span>{item.name}</span>
                     </div>
-                    {/* <span className="time"> {item.time} </span> */}
+                    <span className="time"> {item.type} </span>
                   </h1>
-                  {/* <p>{item.type}</p> */}
                 </li>
               </ul>
             </div>

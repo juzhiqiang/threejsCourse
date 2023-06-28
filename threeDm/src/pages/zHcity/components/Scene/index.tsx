@@ -18,7 +18,9 @@ import { controls } from "../../three/control";
 import { resetWindow } from "../../three/init";
 import { render } from "../../three/animate";
 import { createMesh } from "../../three/createMesh";
-const Scene = () => {
+import AlarmSprite from "../../three/mesh/AlarmSprite";
+let spMesh: any = [];
+const Scene = ({ eventData }: any) => {
   const three = useRef<{
     gui?: dat.GUI;
     scene?: THREE.Scene;
@@ -47,6 +49,24 @@ const Scene = () => {
 
     render();
   }, []);
+  useEffect(() => {
+    spMesh.forEach((item: { remove: () => void }) => {
+      item.remove();
+    });
+    eventData.forEach((item: { name: string | undefined; position: any }) => {
+      let newPosition = {
+        x: item.position.x / 5 - 10,
+        z: item.position.y / 5 - 10,
+      };
+      console.log(newPosition);
+      const alarmSprite = new AlarmSprite(item.name, newPosition);
+      scene.add(alarmSprite.mesh);
+      spMesh.push(alarmSprite);
+      alarmSprite.onClick((res: any) => {
+        console.log(res);
+      });
+    });
+  }, [eventData]);
 
   return <div className={styles.scene} ref={sceneRef}></div>;
 };

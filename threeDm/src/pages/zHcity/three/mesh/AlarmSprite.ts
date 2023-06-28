@@ -9,14 +9,24 @@ export default class AlarmSprite {
   fns: Function[];
   raycaster: THREE.Raycaster;
   mouse: THREE.Vector2;
-  constructor() {
+  constructor(type = "火警", position = { x: -1.8, z: 3 }, color = 0xff0000) {
     this.textLoader = new THREE.TextureLoader();
-    this.map = this.textLoader.load("/textures/zhCity/warning.png");
-    this.material = new THREE.SpriteMaterial({ map: this.map });
+    const typeImg: any = {
+      火警: "/textures/zhCity/tag/fire.png",
+      治安: "/textures/zhCity/tag/jingcha.png",
+      电力: "/textures/zhCity/tag/e.png",
+    };
+    this.map = this.textLoader.load(typeImg[type]);
+    this.material = new THREE.SpriteMaterial({
+      map: this.map,
+      color: color,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+    });
     this.mesh = new THREE.Sprite(this.material);
 
     // 设置图片位置
-    this.mesh.position.set(-4.2, 3.5, -1);
+    this.mesh.position.set(position.x, 3.5, position.z);
 
     // 点击事件集合
     this.fns = [];
@@ -46,5 +56,13 @@ export default class AlarmSprite {
   // 封装点击事件
   onClick(fn: Function) {
     this.fns.push(fn);
+  }
+
+  // 移除方法
+  remove() {
+    this.mesh.remove();
+    this.mesh.removeFromParent();
+    this.mesh.geometry.dispose();
+    this.mesh.material.dispose();
   }
 }
