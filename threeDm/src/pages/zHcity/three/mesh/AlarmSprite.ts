@@ -21,7 +21,8 @@ export default class AlarmSprite {
       map: this.map,
       color: color,
       transparent: true,
-      blending: THREE.AdditiveBlending,
+      // blending: THREE.AdditiveBlending,
+      depthTest: false,
     });
     this.mesh = new THREE.Sprite(this.material);
 

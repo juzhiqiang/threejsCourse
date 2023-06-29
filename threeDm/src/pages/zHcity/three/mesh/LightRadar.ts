@@ -9,12 +9,16 @@ export default class LightRadar {
   geometry: THREE.PlaneGeometry;
   material: THREE.ShaderMaterial;
   mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial>;
-  constructor() {
-    this.geometry = new THREE.PlaneGeometry(2, 2);
+  constructor(
+    randius: number = 2,
+    position: { x: number; z: number } = { x: 0, z: 0 },
+    color: any = "#ff0000"
+  ) {
+    this.geometry = new THREE.PlaneGeometry(randius, randius);
     this.material = new THREE.ShaderMaterial({
       uniforms: {
         uColor: {
-          value: new THREE.Color("#ff0000"),
+          value: new THREE.Color(color),
         },
         uTime: {
           value: 0.0,
@@ -25,9 +29,8 @@ export default class LightRadar {
       transparent: true,
       side: THREE.DoubleSide,
     });
-
     this.mesh = new THREE.Mesh(this.geometry, this.material);
-    this.mesh.position.set(-10, 1, 8);
+    this.mesh.position.set(position.x, 1, position.z);
     this.mesh.rotation.x = -Math.PI / 2;
 
     gsap.to(this.material.uniforms.uTime, {

@@ -59,17 +59,7 @@ export const createCity = () => {
     const flyLine = new FlyLine();
     scene.add(flyLine.mesh);
 
-    // 添加着色器飞线
-    const flyLineShader = new FlyLineShader();
-    scene.add(flyLineShader.mesh);
-
-    // 添加光墙
-    const light = new LineWall();
-    scene.add(light.mesh);
-
-    // 添加雷达
-    const radar = new LightRadar();
-    scene.add(radar.mesh);
+   
 
     // 添加警告标识
     const alarmSprite = new AlarmSprite();

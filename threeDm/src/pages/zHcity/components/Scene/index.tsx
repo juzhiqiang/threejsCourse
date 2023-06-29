@@ -19,6 +19,9 @@ import { resetWindow } from "../../three/init";
 import { render } from "../../three/animate";
 import { createMesh } from "../../three/createMesh";
 import AlarmSprite from "../../three/mesh/AlarmSprite";
+import LineWall from "../../three/mesh/LineWall";
+import { FlyLineShader } from "../../three/mesh/FlyLineShader";
+import LightRadar from "../../three/mesh/LightRadar";
 let spMesh: any = [];
 const Scene = ({ eventData }: any) => {
   const three = useRef<{
@@ -30,6 +33,36 @@ const Scene = ({ eventData }: any) => {
     controls?: any;
   }>({});
   const sceneRef = useRef<HTMLDivElement | null>(null);
+  const imgRef: any = useRef({
+    火警: (position: { x: any; z: any }) => {
+      // 光墙
+      const lightWall = new LineWall(1, 2, position, 0xff0020);
+      scene.add(lightWall.mesh);
+      spMesh.push(lightWall);
+    },
+    治安: (position: { x: number; y: number }) => {
+      // 添加着色器飞线
+      const flyLineShader = new FlyLineShader(
+        {
+          x: position.x / 2,
+          z: position.y / 2,
+        },
+        new THREE.Color(Math.random(), Math.random(), Math.random()).getHex()
+      );
+      scene.add(flyLineShader.mesh);
+      spMesh.push(flyLineShader);
+    },
+    电力: (position: { x: any; y: any }) => {
+      // 添加雷达
+      const radar = new LightRadar(
+        2,
+        { x: position.x / 2, z: position.y / 2 },
+        new THREE.Color(Math.random(), Math.random(), Math.random()).getHex()
+      );
+      scene.add(radar.mesh);
+      spMesh.push(radar);
+    },
+  });
   useEffect(() => {
     three.current.gui = gui;
     three.current.scene = scene;
@@ -49,22 +82,26 @@ const Scene = ({ eventData }: any) => {
 
     render();
   }, []);
+
   useEffect(() => {
     spMesh.forEach((item: { remove: () => void }) => {
       item.remove();
     });
-    eventData.forEach((item: { name: string | undefined; position: any }) => {
+    eventData.forEach((item: { name: string; position: any }) => {
       let newPosition = {
         x: item.position.x / 5 - 10,
         z: item.position.y / 5 - 10,
       };
-      console.log(newPosition);
       const alarmSprite = new AlarmSprite(item.name, newPosition);
       scene.add(alarmSprite.mesh);
       spMesh.push(alarmSprite);
       alarmSprite.onClick((res: any) => {
         console.log(res);
       });
+
+      if (["火警", "治安", "电力"].includes(item.name)) {
+        imgRef.current[item.name]?.(item.position);
+      }
     });
   }, [eventData]);
 

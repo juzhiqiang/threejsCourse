@@ -8,8 +8,13 @@ export default class LineWall {
   geometry: THREE.CylinderGeometry;
   material: THREE.ShaderMaterial;
   mesh: THREE.Mesh<THREE.CylinderGeometry, THREE.ShaderMaterial>;
-  constructor() {
-    this.geometry = new THREE.CylinderGeometry(5, 5, 5, 32, 1, true);
+  constructor(
+    radius = 5,
+    length = 2,
+    position: { x: number; z: number } = { x: 0, z: 0 },
+    color = 0xffff00
+  ) {
+    this.geometry = new THREE.CylinderGeometry(radius, radius, 2, 32, 1, true);
     this.material = new THREE.ShaderMaterial({
       vertexShader: vertexShader,
       fragmentShader: fragmentShader,
@@ -17,7 +22,7 @@ export default class LineWall {
       side: THREE.DoubleSide,
     });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
-    this.mesh.position.set(0, 1, 0);
+    this.mesh.position.set(position.x, 1, position.z);
 
     // 获取物体高度差
     this.mesh.geometry.computeBoundingBox();
@@ -29,10 +34,17 @@ export default class LineWall {
 
     // 光墙动画
     gsap.to(this.mesh.scale, {
-      x: 2,
-      z: 2,
+      x: length,
+      z: length,
       duration: 2,
       repeat: -1,
     });
+  }
+
+  remove() {
+    this.mesh.remove();
+    this.mesh.removeFromParent();
+    this.mesh.geometry.dispose();
+    this.mesh.material.dispose();
   }
 }

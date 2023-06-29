@@ -10,12 +10,12 @@ export class FlyLineShader {
   geometry: THREE.BufferGeometry;
   shaderMaterial: THREE.ShaderMaterial;
   mesh: THREE.Points<THREE.BufferGeometry, THREE.ShaderMaterial>;
-  constructor() {
+  constructor(position: any = { x: 0, z: 0 }, color = 0x00ffff) {
     // 根据点生成曲线
     let linePoints = [
       new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(-5, 4, 0),
-      new THREE.Vector3(-8, 0, 0),
+      new THREE.Vector3(position.x / 2, 4, position.z / 2),
+      new THREE.Vector3(position.x, 0, position.z),
     ];
     // 创建曲线
     this.lineCurve = new THREE.CatmullRomCurve3(linePoints);
@@ -36,11 +36,11 @@ export class FlyLineShader {
           value: 0,
         },
         uColor: {
-          value: new THREE.Color(0xfffff00),
+          value: new THREE.Color(color),
         },
-        uLength:{
-          value:points.length
-        }
+        uLength: {
+          value: points.length,
+        },
       },
       vertexShader: vertex,
       fragmentShader: fragment,
@@ -59,5 +59,12 @@ export class FlyLineShader {
       repeat: -1,
       ease: "none",
     });
+  }
+
+  remove() {
+    this.mesh.remove();
+    this.mesh.removeFromParent();
+    this.mesh.geometry.dispose();
+    this.mesh.material.dispose();
   }
 }
