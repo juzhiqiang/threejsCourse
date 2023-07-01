@@ -25,6 +25,12 @@ const BigScreen = (props: any) => {
     },
   ]);
 
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    setActive(props?.sprite?.i || 0);
+  }, [props.sprite]);
+
   return (
     <div className={styles.bigScreen}>
       <div className={styles.header}>智慧大屏</div>
@@ -48,7 +54,10 @@ const BigScreen = (props: any) => {
         </div>
         <div className={styles.right}>
           {(props.data || []).map((item: any, i) => (
-            <div className={`${styles.cityEvent} ${styles.list}`}>
+            <div
+              className={`${styles.cityEvent} ${styles.list}`}
+              onClick={() => props.onEventList(item, i)}
+            >
               <h3>
                 <span>事件列表</span>
               </h3>
@@ -56,7 +65,9 @@ const BigScreen = (props: any) => {
                 <li>
                   <h1>
                     <div>
-                      <span>{item.name}</span>
+                      <span className={`${active === i ? styles.active : ""}`}>
+                        {item.name}
+                      </span>
                     </div>
                     <span className="time"> {item.type} </span>
                   </h1>

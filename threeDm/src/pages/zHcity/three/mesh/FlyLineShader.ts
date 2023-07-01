@@ -10,6 +10,7 @@ export class FlyLineShader {
   geometry: THREE.BufferGeometry;
   shaderMaterial: THREE.ShaderMaterial;
   mesh: THREE.Points<THREE.BufferGeometry, THREE.ShaderMaterial>;
+  eventIndex: any;
   constructor(position: any = { x: 0, z: 0 }, color = 0x00ffff) {
     // 根据点生成曲线
     let linePoints = [

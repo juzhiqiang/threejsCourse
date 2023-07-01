@@ -9,6 +9,7 @@ export default class LightRadar {
   geometry: THREE.PlaneGeometry;
   material: THREE.ShaderMaterial;
   mesh: THREE.Mesh<THREE.PlaneGeometry, THREE.ShaderMaterial>;
+  eventIndex: any;
   constructor(
     randius: number = 2,
     position: { x: number; z: number } = { x: 0, z: 0 },

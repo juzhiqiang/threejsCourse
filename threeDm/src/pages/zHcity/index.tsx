@@ -5,6 +5,8 @@ import { getSmartCityList } from "./Api";
 
 const ZhCity = () => {
   const [eventData, setEventData] = useState([]);
+  const [sprite, setSprite] = useState({});
+  const [eventHandle, setEventHandle] = useState({});
 
   useEffect(() => {
     getSmartCityList().then((res) => {
@@ -15,8 +17,21 @@ const ZhCity = () => {
   }, []);
   return (
     <div>
-      <Scene eventData={eventData}></Scene>
-      <BigScreen data={eventData} />
+      <Scene
+        eventData={eventData}
+        eventHandle={eventHandle}
+        onSpriteClick={(item: any, i: any) =>
+          setSprite({
+            item,
+            i,
+          })
+        }
+      ></Scene>
+      <BigScreen
+        data={eventData}
+        sprite={sprite}
+        onEventList={(data: any, i: any) => setEventHandle({ data, i })}
+      />
     </div>
   );
 };

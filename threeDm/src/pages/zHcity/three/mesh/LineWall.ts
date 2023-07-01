@@ -8,6 +8,7 @@ export default class LineWall {
   geometry: THREE.CylinderGeometry;
   material: THREE.ShaderMaterial;
   mesh: THREE.Mesh<THREE.CylinderGeometry, THREE.ShaderMaterial>;
+  eventIndex: any;
   constructor(
     radius = 5,
     length = 2,
