@@ -15,6 +15,7 @@ specifiers:
   meshline: ^3.1.6
   raw-loader: ^4.0.2
   three: ^0.151.3
+  tween: ^0.9.0
   typescript: ^5.0.0
   umi: ^4.0.64
 
@@ -29,6 +30,7 @@ dependencies:
   meshline: registry.npmjs.org/meshline/3.1.6_three@0.151.3
   raw-loader: registry.npmjs.org/raw-loader/4.0.2
   three: registry.npmjs.org/three/0.151.3
+  tween: registry.npmjs.org/tween/0.9.0
   umi: registry.npmjs.org/umi/4.0.64_vr2f2vkaw4wweh6xlhmevaicyy
 
 devDependencies:
@@ -9686,6 +9688,13 @@ packages:
     resolution: {integrity: sha512-JVa5ijo+j/sOoHGjw0sxw734b1LhBkQ3bvUGNdxnVXDCX81Yx7TFgnZygxrIIWn23hbfTaMYLwRmAxFyDuFmIw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/tty-browserify/-/tty-browserify-0.0.0.tgz}
     name: tty-browserify
     version: 0.0.0
+    dev: false
+
+  registry.npmjs.org/tween/0.9.0:
+    resolution: {integrity: sha512-/Wpqy/fkHzp8VJ0kh52Lssett+5o1X6XaLLZIDFI4Biuk6GEgyGZPihq1zNR9wjj+PcgYCPheV5gxMXyKgtZsw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/tween/-/tween-0.9.0.tgz}
+    name: tween
+    version: 0.9.0
+    deprecated: Use official tween.js package
     dev: false
 
   registry.npmjs.org/type-check/0.3.2:
