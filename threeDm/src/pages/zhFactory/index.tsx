@@ -1,6 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import Scene from "./components/Scene";
 import { getSmartCityList } from "./Api";
+import Page from "./page";
+
+export const MyContext = createContext({});
 
 const ZhCity = () => {
   const [eventData, setEventData] = useState([]);
@@ -15,19 +18,21 @@ const ZhCity = () => {
     });
   }, []);
   return (
-    <div>
-      <Scene
-        eventData={eventData}
-        eventHandle={eventHandle}
-        onSpriteClick={(item: any, i: any) =>
-          setSprite({
-            item,
-            i,
-          })
-        }
-      ></Scene>
- 
-    </div>
+    <MyContext.Provider value={{ eventHandle, setEventHandle }}>
+      <div>
+        <Scene
+          eventData={eventData}
+          eventHandle={eventHandle}
+          onSpriteClick={(item: any, i: any) =>
+            setSprite({
+              item,
+              i,
+            })
+          }
+        ></Scene>
+        <Page />
+      </div>
+    </MyContext.Provider>
   );
 };
 
