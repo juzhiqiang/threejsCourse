@@ -11,7 +11,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 // @ts-ignore
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { scene } from "../scene";
-import { Object3D, Event } from "three";
+import CameraModule from "../carame";
 import * as THREE from "three";
 import gsap from "gsap";
 /**
@@ -34,38 +34,56 @@ export const CreateCity = () => {
   dracoLoader.setDecoderPath("/draco/");
   loader.setDRACOLoader(dracoLoader);
   // 加载带热气球城市
-  loader.load("/mode/city4.glb", (gltf: { animations: any; scene: any }) => {
-    scene.add(gltf.scene);
-    gltf.scene.traverse((child: any) => {
-      if (child.name === "热气球") {
-        hotQiuGltfAnimate = gltf.animations;
-        // 实例化动画混合器
-        mixer = new THREE.AnimationMixer(child);
-      }
-      if (child.name === "汽车园区轨迹") {
-        const line = child;
-        // 根据点位创建线路
-        const points = [];
-        for (let i = line.geometry.attributes.position.count - 1; i >= 0; i--) {
-          points.push(
-            new THREE.Vector3(
-              line.geometry.attributes.position.getX(i),
-              line.geometry.attributes.position.getY(i),
-              line.geometry.attributes.position.getZ(i)
-            )
-          );
+  loader.load(
+    "/mode/city4.glb",
+    (gltf: {
+      animations: any;
+      scene: any;
+      cameras: THREE.PerspectiveCamera[];
+    }) => {
+      console.log(gltf);
+      scene.add(gltf.scene);
+      gltf.scene.traverse((child: any) => {
+        if (child.name === "热气球") {
+          hotQiuGltfAnimate = gltf.animations;
+          // 实例化动画混合器
+          mixer = new THREE.AnimationMixer(child);
         }
-        // 生成曲线
-        curve = new THREE.CatmullRomCurve3(points);
-        carLineCurveProgress.curveProgress = 0;
-        carAnimation();
-      }
+        if (child.name === "汽车园区轨迹") {
+          const line = child;
+          line.visible = false;
+          // 根据点位创建线路
+          const points = [];
+          for (
+            let i = line.geometry.attributes.position.count - 1;
+            i >= 0;
+            i--
+          ) {
+            points.push(
+              new THREE.Vector3(
+                line.geometry.attributes.position.getX(i),
+                line.geometry.attributes.position.getY(i),
+                line.geometry.attributes.position.getZ(i)
+              )
+            );
+          }
+          // 生成曲线
+          curve = new THREE.CatmullRomCurve3(points);
+          carLineCurveProgress.curveProgress = 0;
+          carAnimation();
+        }
 
-      if (child.name === "redcar") {
-        redCar = child;
-      }
-    });
-  });
+        if (child.name === "redcar") {
+          redCar = child;
+        }
+      });
+
+      // 添加相机
+      gltf.cameras.forEach((camera) => {
+        CameraModule.add(camera.name, camera);
+      });
+    }
+  );
 
   const update = (time: number) => {
     if (mixer) {

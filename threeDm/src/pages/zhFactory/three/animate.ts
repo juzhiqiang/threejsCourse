@@ -1,4 +1,4 @@
-import { camera } from "./carame";
+import CameraModule from "./carame";
 import { controls } from "./control";
 import { renderer } from "./renderer";
 import { scene } from "./scene";
@@ -10,6 +10,6 @@ export const render = (t: number) => {
   controls.update();
   const time = clock.getDelta();
   updateMesh(time);
-  renderer?.render(scene, camera);
+  renderer?.render(scene, CameraModule.activeCamera);
   requestAnimationFrame(render);
 };

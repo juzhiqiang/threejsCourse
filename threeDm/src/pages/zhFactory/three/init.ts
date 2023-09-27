@@ -1,10 +1,10 @@
-import { camera } from "./carame";
+import CameraModule from "./carame";
 import { renderer } from "./renderer";
 
 export const resetWindow = () => {
   window.addEventListener("resize", () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
+    CameraModule.activeCamera.aspect = window.innerWidth / window.innerHeight;
+    CameraModule.activeCamera.updateProjectionMatrix();
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);

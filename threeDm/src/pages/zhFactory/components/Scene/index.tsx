@@ -10,7 +10,7 @@ import { useContext, useEffect, useRef } from "react";
 import styles from "./index.less";
 import * as THREE from "three";
 import { scene } from "../../three/scene";
-import { camera } from "../../three/carame";
+import CameraModule from "../../three/carame";
 import { gui } from "../../three/gui";
 import { renderer } from "../../three/renderer";
 import { axies } from "../../three/axesHelper";
@@ -36,7 +36,7 @@ const Scene = ({ eventData, onSpriteClick }: any) => {
   useEffect(() => {
     three.current.gui = gui;
     three.current.scene = scene;
-    three.current.camera = camera;
+    three.current.camera = CameraModule.activeCamera;
     // 初始化渲染器
     three.current.renderer = renderer;
     three.current.axies = axies;
@@ -54,6 +54,10 @@ const Scene = ({ eventData, onSpriteClick }: any) => {
   useEffect(() => {
     if (eventHandle.hotQiuAction) {
       hotQiuselectAnimata(eventHandle.hotQiuAction);
+    }
+
+    if (eventHandle.cameraActive) {
+      CameraModule.setActive(eventHandle.cameraActive)
     }
   }, [eventHandle]);
 
