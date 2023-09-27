@@ -5,7 +5,8 @@ import { MyContext } from "..";
 
 const Page = ({ hotQiuAction }: any) => {
   const [hotQiu, setHotQiu] = useState("none");
-  const [cameraTab, setCameraTab] = useState("none");
+  const [cameraTab, setCameraTab] = useState("default");
+  const [control, setControl] = useState("Orbit");
   const { eventHandle, setEventHandle }: any = useContext(MyContext);
   const handleChange = (e) => {
     setHotQiu(e);
@@ -18,6 +19,13 @@ const Page = ({ hotQiuAction }: any) => {
     setCameraTab(e);
     setEventHandle({
       cameraActive: e,
+    });
+  };
+
+  const handleControl = (e) => {
+    setControl(e);
+    setEventHandle({
+      controlActive: e,
     });
   };
 
@@ -43,6 +51,17 @@ const Page = ({ hotQiuAction }: any) => {
           { value: "default", label: "默认镜头" },
           { value: "carcamera_Orientation", label: "第三人称" },
           { value: "rightcamera_Orientation", label: "右侧跟随视角" },
+        ]}
+      />
+      <Select
+        className={`${styles.event}`}
+        style={{ width: 120 }}
+        onChange={handleControl}
+        value={control}
+        options={[
+          { value: "Orbit", label: "轨道控制器" },
+          { value: "Fly", label: "飞行控制器" },
+          { value: "FirstPerson", label: "第一人称控制器" },
         ]}
       />
     </div>

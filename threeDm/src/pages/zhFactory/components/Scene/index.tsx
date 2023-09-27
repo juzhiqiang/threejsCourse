@@ -14,14 +14,11 @@ import CameraModule from "../../three/carame";
 import { gui } from "../../three/gui";
 import { renderer } from "../../three/renderer";
 import { axies } from "../../three/axesHelper";
-import { controls } from "../../three/control";
+import ControlsModuls from "../../three/control";
 import { resetWindow } from "../../three/init";
 import { render } from "../../three/animate";
 import { createMesh, hotQiuselectAnimata } from "../../three/createMesh";
-import AlarmSprite from "../../three/mesh/AlarmSprite";
-import { gsap } from "gsap";
 import { MyContext } from "../..";
-let spMesh: any = [];
 const Scene = ({ eventData, onSpriteClick }: any) => {
   const { eventHandle, setEventHandle }: any = useContext(MyContext);
   const three = useRef<{
@@ -40,7 +37,7 @@ const Scene = ({ eventData, onSpriteClick }: any) => {
     // 初始化渲染器
     three.current.renderer = renderer;
     three.current.axies = axies;
-    three.current.controls = controls;
+    three.current.controls = ControlsModuls;
 
     three.current.scene.add(three.current.camera);
     three.current.scene.add(axies);
@@ -57,7 +54,11 @@ const Scene = ({ eventData, onSpriteClick }: any) => {
     }
 
     if (eventHandle.cameraActive) {
-      CameraModule.setActive(eventHandle.cameraActive)
+      CameraModule.setActive(eventHandle.cameraActive);
+    }
+
+    if (eventHandle.controlActive) {
+      three.current.controls[`set${eventHandle.controlActive}Controls`]();
     }
   }, [eventHandle]);
 
