@@ -17,7 +17,11 @@ import { axies } from "../../three/axesHelper";
 import ControlsModuls from "../../three/control";
 import { resetWindow } from "../../three/init";
 import { render } from "../../three/animate";
-import { createMesh, hotQiuselectAnimata } from "../../three/createMesh";
+import {
+  createMesh,
+  focusDancetAnimata,
+  hotQiuselectAnimata,
+} from "../../three/createMesh";
 import { MyContext } from "../..";
 const Scene = ({ eventData, onSpriteClick }: any) => {
   const { eventHandle, setEventHandle }: any = useContext(MyContext);
@@ -54,6 +58,8 @@ const Scene = ({ eventData, onSpriteClick }: any) => {
     }
 
     if (eventHandle.cameraActive) {
+      if (["focus_dance"].includes(eventHandle.cameraActive))
+        return focusDancetAnimata();
       CameraModule.setActive(eventHandle.cameraActive);
     }
 

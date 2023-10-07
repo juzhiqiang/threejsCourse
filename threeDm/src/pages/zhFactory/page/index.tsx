@@ -51,6 +51,7 @@ const Page = ({ hotQiuAction }: any) => {
           { value: "default", label: "默认镜头" },
           { value: "carcamera_Orientation", label: "第三人称" },
           { value: "rightcamera_Orientation", label: "右侧跟随视角" },
+          { value: "focus_dance", label: "聚焦单体建筑" },
         ]}
       />
       <Select

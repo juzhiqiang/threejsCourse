@@ -17,3 +17,7 @@ export const updateMesh = (time: number) => {
 export const hotQiuselectAnimata = (type: string) => {
   city.selectAnimata(type);
 };
+
+export const focusDancetAnimata = () => {
+  city.focusDance();
+};

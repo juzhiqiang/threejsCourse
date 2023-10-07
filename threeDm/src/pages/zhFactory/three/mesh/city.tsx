@@ -14,12 +14,14 @@ import { scene } from "../scene";
 import CameraModule from "../carame";
 import * as THREE from "three";
 import gsap from "gsap";
+import ControlsModuls from "../control";
 /**
  * @description: 创建城市
  * @return {*}
  */
 export const CreateCity = () => {
   let mixer: THREE.AnimationMixer;
+  let mixer1: THREE.AnimationMixer;
   let hotQiuGltfAnimate: any;
   let action: THREE.AnimationAction;
   // 汽车线路相关
@@ -27,6 +29,8 @@ export const CreateCity = () => {
   let redCar: any;
   // 段落计数，gsap用不了直接数字变化通过对象参数方式达到效果
   let carLineCurveProgress: any = {};
+  // 模型
+  let women: any;
 
   const loader = new GLTFLoader();
   // 模型压缩过需要解压
@@ -41,7 +45,6 @@ export const CreateCity = () => {
       scene: any;
       cameras: THREE.PerspectiveCamera[];
     }) => {
-      console.log(gltf);
       scene.add(gltf.scene);
       gltf.scene.traverse((child: any) => {
         if (child.name === "热气球") {
@@ -85,10 +88,45 @@ export const CreateCity = () => {
     }
   );
 
+  // 骨骼模型
+  loader.load(
+    "/mode/women.glb",
+    (gltf: {
+      animations: any;
+      scene: any;
+      cameras: THREE.PerspectiveCamera[];
+    }) => {
+      scene.add(gltf.scene);
+      women = gltf.scene;
+      gltf.scene.traverse(function (child: {
+        name: string;
+        material: THREE.MeshStandardMaterial;
+        isMesh: any;
+      }) {
+        if (child.name == "Floor") {
+          child.material = new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+          });
+        }
+        if (child.isMesh) {
+          child.material.depthWrite = true;
+          child.material.normalScale = new THREE.Vector2(1, 1);
+          child.material.side = THREE.FrontSide;
+          child.material.transparent = false;
+          child.material.vertexColors = false;
+        }
+      });
+      mixer1 = new THREE.AnimationMixer(gltf.scene);
+      const action = mixer1.clipAction(gltf.animations[0]);
+      action.play();
+    }
+  );
+
   const update = (time: number) => {
     if (mixer) {
       mixer.update(time);
     }
+    mixer1?.update(time);
   };
 
   // 更新热气球动画类型
@@ -101,6 +139,7 @@ export const CreateCity = () => {
     action = mixer.clipAction(clip);
     action.play();
   };
+
   // 更新汽车动画
   const carAnimation = () => {
     gsap.to(carLineCurveProgress, {
@@ -123,8 +162,28 @@ export const CreateCity = () => {
     });
   };
 
+  // 聚焦单体建筑
+  const focusDance = () => {
+    const position = women.position.clone();
+    gsap.to(ControlsModuls.controls.target, {
+      x: position.x,
+      y: position.y,
+      z: position.z,
+      direction: 1,
+      onComplete: () => {
+        gsap.to(ControlsModuls.controls.target, {
+          x: position.x - 2,
+          y: position.y - 2,
+          z: position.z - 1,
+          direction: 2,
+        });
+      },
+    });
+  };
+
   return {
     update,
     selectAnimata,
+    focusDance,
   };
 };
