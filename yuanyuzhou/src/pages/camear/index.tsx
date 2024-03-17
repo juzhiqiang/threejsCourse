@@ -108,7 +108,9 @@ const Camear = () => {
       playerCollisions();
     }
 
-    const playerCollisions = () => {};
+    const playerCollisions = () => {
+      
+    };
 
     // 状态重置
     const resetPlayer = () => {
