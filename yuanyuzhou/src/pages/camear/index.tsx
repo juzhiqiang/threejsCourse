@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import styles from "./index.less";
 import * as THREE from "three";
 // @ts-ignore
@@ -10,8 +10,23 @@ import { Capsule } from "three/examples/jsm/math/Capsule";
 // @ts-ignore
 import Stats from "three/examples/jsm/libs/stats.module";
 
+interface KeyState {
+  [key: string]: boolean;
+}
+
 const Camear = () => {
   const container = useRef<HTMLDivElement>(null);
+  // 地面上为true
+  const playerOnFloor = useRef(false);
+  // 键盘按下事件
+  const keyStates: MutableRefObject<KeyState> = useRef<KeyState>({
+    KeyW: false,
+    KeyA: false,
+    KeyS: false,
+    KeyD: false,
+    Space: false,
+  });
+
   const init = () => {
     const clock = new THREE.Clock();
 
@@ -68,8 +83,12 @@ const Camear = () => {
     plane.receiveShadow = true;
     scene.add(plane);
 
-    // 创建一个空间
-    const world = new Octree();
+    // 创建一个空间,进行八叉树碰撞
+    const group = new THREE.Group();
+    group.add(plane);
+    scene.add(group);
+    const worldOctree = new Octree();
+    worldOctree.fromGraphNode(group);
 
     // 创建一个胶囊
     const playerCollider = new Capsule(
@@ -96,7 +115,12 @@ const Camear = () => {
     const playerDirection = new THREE.Vector3(0, 0, 0);
 
     function updatePlayer(deltaTime: number) {
-      playerVelocity.y += gravity * deltaTime;
+      // 已经停在地面上 关闭重力加速度
+      if (playerOnFloor.current) {
+        playerVelocity.y = 0;
+      } else {
+        playerVelocity.y += gravity * deltaTime;
+      }
       // 更新位置，计算移动距离
       const playerMoveDistance = playerVelocity
         .clone()
@@ -109,7 +133,13 @@ const Camear = () => {
     }
 
     const playerCollisions = () => {
-      
+      // 物体碰撞检测
+      const result = worldOctree.capsuleIntersect(playerCollider);
+      playerOnFloor.current = false;
+      if (result) {
+        playerOnFloor.current = result.normal.y > 0;
+        playerCollider.translate(result.normal.multiplyScalar(result.depth));
+      }
     };
 
     // 状态重置
@@ -129,6 +159,15 @@ const Camear = () => {
 
   useEffect(() => {
     init();
+    const keyDownEvent = (e: KeyboardEvent) => {
+      keyStates.current[e.code] = true;
+    };
+
+    document.addEventListener("keydown", keyDownEvent, false);
+
+    return () => {
+      document.removeEventListener("keydown", keyDownEvent, false);
+    };
   }, []);
   console.log("camear");
 
